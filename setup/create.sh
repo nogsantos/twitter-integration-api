@@ -11,6 +11,10 @@ APPLICATION_VERSION=v1
 CONTACT_NAME="Fabricio Nogueira"
 CONTACT_SITE=http://fabricionogueira.me
 CONTACT_EMAIL=nogsantos@gmail.com
+TWITTER_CONSUMER_KEY=to-be-defined
+TWITTER_CONSUMER_SECRET=to-be-defined
+TWITTER_ACCESS_TOKEN=to-be-defined
+TWITTER_ACCESS_TOKEN_SECRET=to-be-defined
 EOF
 	printf ".env file created. \n\n"
 }

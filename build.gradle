@@ -53,6 +53,7 @@ dependencies {
     testImplementation 'io.projectreactor:reactor-test'
     //	Twitter integration
     compile 'org.twitter4j:twitter4j:4.0.7'
+    compile group: 'org.twitter4j', name: 'twitter4j-stream', version: '4.0.7'
     // Development tools
     compile('io.springfox:springfox-swagger2:2.9.2')
     compile('io.springfox:springfox-swagger-ui:2.9.2')
