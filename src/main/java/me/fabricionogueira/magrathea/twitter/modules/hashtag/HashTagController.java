@@ -1,30 +1,59 @@
 package me.fabricionogueira.magrathea.twitter.modules.hashtag;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
+import io.swagger.annotations.*;
 import me.fabricionogueira.magrathea.twitter.modules.hashtag.exceptions.HashTagException;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 @RestController
 @RequestMapping("/hashtag")
 @Api(description = "Hashtag controller")
 public class HashTagController {
 
-    @ApiOperation("Get all hashtags ")
+    private HashTagService service;
+
+    @Autowired
+    public HashTagController(HashTagService service) {
+        this.service = service;
+    }
+
+    @ApiOperation("Get all HashTags")
     @ApiResponses({
             @ApiResponse(code = 200, message = "Successfully sent"),
             @ApiResponse(code = 400, message = "Processing request error"),
             @ApiResponse(code = 404, message = "Not found")
     })
     @GetMapping("/")
-    public ResponseEntity getAll() throws HashTagException {
-        return ResponseEntity.ok("Alive");
+    public Flux<HashTagDocument> findAll() throws HashTagException {
+        return service.findAll();
     }
 
+    @ApiOperation("Get a HashTags")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "Successfully sent"),
+            @ApiResponse(code = 400, message = "Processing request error"),
+            @ApiResponse(code = 404, message = "Not found")
+    })
+    @GetMapping("/search/{text}")
+    public Mono<Mono<HashTagDocument>> find(
+            @ApiParam(value = "Search in api by HashTag text")
+            @PathVariable String text
+    ) throws HashTagException {
 
+        return Mono.justOrEmpty(service.findByText(text));
+    }
+
+    @ApiOperation("Save a HashTags")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "Successfully saved"),
+            @ApiResponse(code = 400, message = "Processing request error"),
+            @ApiResponse(code = 404, message = "Resource not found")
+    })
+    @PostMapping("/save")
+    public Mono<HashTagDocument> save(@RequestBody HashTagDocument hashTag) throws HashTagException {
+
+        return service.save(hashTag);
+    }
 }
