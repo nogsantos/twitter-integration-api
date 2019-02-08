@@ -4,7 +4,6 @@ import org.springframework.stereotype.Service;
 import twitter4j.*;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service(value = "twitterService")
 public class TwitterService {
@@ -13,12 +12,11 @@ public class TwitterService {
         return TwitterFactory.getSingleton();
     }
 
-    public List<String> searchTweetsBy(String hashTag) throws TwitterException {
+    public List<Status> searchTweetsBy(String hashTag) throws TwitterException {
         Twitter twitter = getTwitterinstance();
         Query query = new Query("#" + hashTag);
         QueryResult result = twitter.search(query);
-        List<Status> statuses = result.getTweets();
-        return statuses.stream().map(Status::getText).collect(Collectors.toList());
+        return result.getTweets();
     }
 
 }
