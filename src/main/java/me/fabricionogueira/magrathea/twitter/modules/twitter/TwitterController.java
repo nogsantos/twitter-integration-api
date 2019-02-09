@@ -1,11 +1,13 @@
 package me.fabricionogueira.magrathea.twitter.modules.twitter;
 
 import io.swagger.annotations.*;
+import me.fabricionogueira.magrathea.twitter.modules.twitter.dto.TwitterDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import reactor.core.publisher.Flux;
 import twitter4j.Status;
 import twitter4j.TwitterException;
 
@@ -30,7 +32,7 @@ public class TwitterController {
             @ApiResponse(code = 404, message = "Request no found")
     })
     @GetMapping("/search/{hashTag}")
-    public List<Status> search(
+    public Flux<TwitterDTO> search(
             @ApiParam(value = "Search on twitter by HashTag text")
             @PathVariable String hashTag
     ) throws TwitterException {

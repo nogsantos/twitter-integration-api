@@ -1,6 +1,7 @@
 package me.fabricionogueira.magrathea.twitter.modules.hashtag;
 
 import io.swagger.annotations.*;
+import me.fabricionogueira.magrathea.twitter.modules.hashtag.dto.HashTagDTO;
 import me.fabricionogueira.magrathea.twitter.modules.hashtag.exceptions.HashTagException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -26,7 +27,7 @@ public class HashTagController {
             @ApiResponse(code = 404, message = "Not found")
     })
     @GetMapping("/")
-    public Flux<HashTagDocument> findAll() throws HashTagException {
+    public Flux<HashTagDTO> findAll() throws HashTagException {
         return service.findAll();
     }
 
@@ -37,12 +38,11 @@ public class HashTagController {
             @ApiResponse(code = 404, message = "Not found")
     })
     @GetMapping("/search/{text}")
-    public Mono<Mono<HashTagDocument>> find(
+    public Mono<Mono<HashTagDTO>> find(
             @ApiParam(value = "Search in api by HashTag text")
             @PathVariable String text
     ) throws HashTagException {
-
-        return Mono.justOrEmpty(service.findByText(text));
+        return Mono.justOrEmpty(service.findById(text));
     }
 
     @ApiOperation("Save a HashTags")
@@ -52,8 +52,7 @@ public class HashTagController {
             @ApiResponse(code = 404, message = "Resource not found")
     })
     @PostMapping("/save")
-    public Mono<HashTagDocument> save(@RequestBody HashTagDocument hashTag) throws HashTagException {
-
+    public Mono<HashTagDTO> save(@RequestBody final HashTagDocument hashTag) throws HashTagException {
         return service.save(hashTag);
     }
 }

@@ -1,16 +1,17 @@
 package me.fabricionogueira.magrathea.twitter.modules.hashtag;
 
+import me.fabricionogueira.magrathea.twitter.modules.hashtag.dto.HashTagDTO;
 import reactor.core.Disposable;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 public interface HashTagService {
 
-    Flux<HashTagDocument> findAll();
+    Flux<HashTagDTO> findAll();
 
-    Mono<HashTagDocument> findByText(String text);
+    Mono<HashTagDTO> findById(String id);
 
-    Mono<HashTagDocument> save(HashTagDocument hashTag);
+    Mono<HashTagDTO> save(HashTagDocument hashTag);
 
     Disposable remove(HashTagDocument hashTag);
 }
