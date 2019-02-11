@@ -19,7 +19,6 @@ public class HashTagServiceImp implements HashTagService {
     @Override
     public Flux<HashTagDocument> findAll() {
         return repository.findAll();
-
     }
 
     @Override

@@ -23,12 +23,12 @@ public class TwitterScheduler {
     private static final String SCHEDULER = "SCHEDULER";
 
     private HashTagService hashTagService;
-    private TwitterService twitterService;
+    private TwitterApiServiceImp twitterServiceImp;
 
     @Autowired
-    public TwitterScheduler(HashTagService hashTagService, TwitterService twitterService) {
+    public TwitterScheduler(HashTagService hashTagService, TwitterApiServiceImp twitterServiceImp) {
         this.hashTagService = hashTagService;
-        this.twitterService = twitterService;
+        this.twitterServiceImp = twitterServiceImp;
     }
 
         @Scheduled(cron = "0 0 12 * * *", zone = TIME_ZONE)
@@ -37,7 +37,7 @@ public class TwitterScheduler {
         List<String> hashTags = getAllAvailiableHashTags();
         hashTags.forEach(s -> {
             try {
-                Flux<TwitterDTO> twitterDTOFlux = twitterService.searchTweetsByHashTag(s);
+                Flux<TwitterDTO> twitterDTOFlux = twitterServiceImp.getByHashTag(s);
                 log.debug(twitterDTOFlux.toString());
             } catch (TwitterException e) {
                 e.printStackTrace();

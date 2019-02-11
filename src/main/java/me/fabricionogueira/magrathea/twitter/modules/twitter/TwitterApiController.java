@@ -2,6 +2,7 @@ package me.fabricionogueira.magrathea.twitter.modules.twitter;
 
 import io.swagger.annotations.*;
 import me.fabricionogueira.magrathea.twitter.modules.twitter.dto.TwitterDTO;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -11,14 +12,14 @@ import reactor.core.publisher.Flux;
 import twitter4j.TwitterException;
 
 @RestController
-@RequestMapping("/twitter")
-@Api(description = "Twitter controller")
-public class TwitterController {
+@RequestMapping("/twitter/api")
+@Api(description = "Api TwitterDocument controller")
+public class TwitterApiController {
 
-    private TwitterService service;
+    private TwitterApiServiceImp service;
 
     @Autowired
-    public TwitterController(TwitterService service) {
+    public TwitterApiController(TwitterApiServiceImp service) {
         this.service = service;
     }
 
@@ -32,7 +33,16 @@ public class TwitterController {
     public Flux<TwitterDTO> search(
             @ApiParam(value = "Search on twitter by HashTag text")
             @PathVariable String hashTag
-    ) throws TwitterException {
-        return service.searchTweetsByHashTag(hashTag);
+    ) {
+
+        ModelMapper mapper = new ModelMapper();
+
+//        try {
+//            return Flux.fromStream(() -> service.getByHashTag(hashTag).map(
+//                    tweets -> mapper.map(tweets, TwitterDTO.class)
+//            ));
+//        } catch (TwitterException e) {
+//
+//        }
     }
 }

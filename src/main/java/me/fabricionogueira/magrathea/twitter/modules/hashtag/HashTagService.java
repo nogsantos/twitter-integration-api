@@ -1,6 +1,5 @@
 package me.fabricionogueira.magrathea.twitter.modules.hashtag;
 
-import me.fabricionogueira.magrathea.twitter.modules.hashtag.dto.HashTagDTO;
 import reactor.core.Disposable;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;

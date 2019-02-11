@@ -1,31 +1,27 @@
 package me.fabricionogueira.magrathea.twitter.modules.twitter;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
-import me.fabricionogueira.magrathea.twitter.modules.user.UserDocument;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.annotation.PersistenceConstructor;
-import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.Date;
 
+@AllArgsConstructor
+@NoArgsConstructor
 @Getter
 @Setter
 @Document
-public class TwitterDocument<T extends UserDocument> {
+public class TwitterDocument {
     @Id
-    private String id;
-    private String message;
+    private Long id;
     private Date createdAt;
-    @DBRef
-    private UserDocument user;
-
-    @PersistenceConstructor
-    public TwitterDocument(String message, Date createdAt, T user) {
-        this.message = message;
-        this.createdAt = createdAt;
-        this.user = user;
-    }
-
+    private String text;
+    private Long retweetCount;
+    private String lang;
+    private String[] hashtagEntities;
+//    @DBRef
+//    private UserDocument user;
 }
