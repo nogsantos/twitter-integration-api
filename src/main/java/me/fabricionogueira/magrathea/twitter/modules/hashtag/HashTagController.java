@@ -3,6 +3,7 @@ package me.fabricionogueira.magrathea.twitter.modules.hashtag;
 import io.swagger.annotations.*;
 import me.fabricionogueira.magrathea.twitter.modules.hashtag.dto.HashTagDTO;
 import me.fabricionogueira.magrathea.twitter.modules.hashtag.exceptions.HashTagException;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
@@ -14,10 +15,12 @@ import reactor.core.publisher.Mono;
 public class HashTagController {
 
     private HashTagService service;
+    private ModelMapper mapper;
 
     @Autowired
     public HashTagController(HashTagService service) {
         this.service = service;
+        this.mapper = new ModelMapper();
     }
 
     @ApiOperation("Get all HashTags")
@@ -28,7 +31,10 @@ public class HashTagController {
     })
     @GetMapping("/")
     public Flux<HashTagDTO> findAll() throws HashTagException {
-        return service.findAll();
+        return Flux.fromStream(() -> service.findAll().toStream()
+                .map(hashTagDocument -> mapper.map(hashTagDocument, HashTagDTO.class))
+        );
+
     }
 
     @ApiOperation("Get a HashTags")
@@ -38,11 +44,12 @@ public class HashTagController {
             @ApiResponse(code = 404, message = "Not found")
     })
     @GetMapping("/search/{text}")
-    public Mono<Mono<HashTagDTO>> find(
+    public Mono<HashTagDTO> find(
             @ApiParam(value = "Search in api by HashTag text")
             @PathVariable String text
     ) throws HashTagException {
-        return Mono.justOrEmpty(service.findById(text));
+
+        return service.findById(text).map(hashTagDocument -> mapper.map(hashTagDocument, HashTagDTO.class));
     }
 
     @ApiOperation("Save a HashTags")
@@ -53,6 +60,6 @@ public class HashTagController {
     })
     @PostMapping("/save")
     public Mono<HashTagDTO> save(@RequestBody final HashTagDocument hashTag) throws HashTagException {
-        return service.save(hashTag);
+        return service.save(hashTag).map(hashTagDocumentMono -> mapper.map(hashTagDocumentMono, HashTagDTO.class));
     }
 }

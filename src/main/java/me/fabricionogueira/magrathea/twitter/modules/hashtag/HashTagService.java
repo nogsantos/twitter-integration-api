@@ -7,11 +7,11 @@ import reactor.core.publisher.Mono;
 
 public interface HashTagService {
 
-    Flux<HashTagDTO> findAll();
+    Flux<HashTagDocument> findAll();
 
-    Mono<HashTagDTO> findById(String id);
+    Mono<HashTagDocument> findById(String id);
 
-    Mono<HashTagDTO> save(HashTagDocument hashTag);
+    Mono<HashTagDocument> save(HashTagDocument hashTag);
 
     Disposable remove(HashTagDocument hashTag);
 }
