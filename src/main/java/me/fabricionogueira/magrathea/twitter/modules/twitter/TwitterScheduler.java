@@ -4,7 +4,6 @@ import lombok.extern.slf4j.Slf4j;
 import me.fabricionogueira.magrathea.twitter.modules.hashtag.HashTagDocument;
 import me.fabricionogueira.magrathea.twitter.modules.hashtag.HashTagService;
 import me.fabricionogueira.magrathea.twitter.modules.twitter.dto.TwitterDTO;
-import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -32,13 +31,13 @@ public class TwitterScheduler {
         this.twitterService = twitterService;
     }
 
-    //    @Scheduled(cron = "0 0 12 * * *", zone = TIME_ZONE)
-    @Scheduled(fixedRate = 4000)
+        @Scheduled(cron = "0 0 12 * * *", zone = TIME_ZONE)
+//    @Scheduled(fixedRate = 4000)
     public void getTwitterMessagesByHashTagTask() {
         List<String> hashTags = getAllAvailiableHashTags();
         hashTags.forEach(s -> {
             try {
-                Flux<TwitterDTO> twitterDTOFlux = twitterService.searchTweetsBy(s);
+                Flux<TwitterDTO> twitterDTOFlux = twitterService.searchTweetsByHashTag(s);
                 log.debug(twitterDTOFlux.toString());
             } catch (TwitterException e) {
                 e.printStackTrace();

@@ -8,10 +8,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Flux;
-import twitter4j.Status;
 import twitter4j.TwitterException;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/twitter")
@@ -36,6 +33,6 @@ public class TwitterController {
             @ApiParam(value = "Search on twitter by HashTag text")
             @PathVariable String hashTag
     ) throws TwitterException {
-        return service.searchTweetsBy(hashTag);
+        return service.searchTweetsByHashTag(hashTag);
     }
 }

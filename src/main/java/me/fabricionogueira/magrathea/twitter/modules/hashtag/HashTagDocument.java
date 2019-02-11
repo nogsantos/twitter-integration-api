@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @AllArgsConstructor
@@ -15,5 +16,6 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class HashTagDocument {
     @Id
     private String id;
+    @Indexed
     private String text;
 }

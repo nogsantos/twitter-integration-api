@@ -15,16 +15,20 @@ public class TwitterService {
         return TwitterFactory.getSingleton();
     }
 
-    public Flux<TwitterDTO> searchTweetsBy(String hashTag) throws TwitterException {
+    public Flux<TwitterDTO> searchTweetsByHashTag(String hashTag) throws TwitterException {
         log.debug("Getting twitters by HashTag {}", hashTag);
         Twitter twitter = getTwitterInstance();
         Query query = new Query("#" + hashTag);
         query.setCount(100);
-        query.setLang("pt-BR");
+        query.setLang("pt");
         QueryResult result = twitter.search(query);
 
         ModelMapper mapper = new ModelMapper();
-        return Flux.fromStream(() -> result.getTweets().stream().map(twittes -> mapper.map(twittes, TwitterDTO.class)));
+        return Flux.fromStream(
+                () -> result.getTweets()
+                        .stream()
+                        .map(twittes -> mapper.map(twittes, TwitterDTO.class))
+        );
     }
 
 }
