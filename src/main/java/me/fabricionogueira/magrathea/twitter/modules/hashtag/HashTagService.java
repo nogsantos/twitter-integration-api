@@ -1,16 +1,23 @@
 package me.fabricionogueira.magrathea.twitter.modules.hashtag;
 
-import reactor.core.Disposable;
+import me.fabricionogueira.magrathea.twitter.modules.hashtag.exceptions.HashTagException;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 public interface HashTagService {
 
-    Flux<HashTagDocument> findAll();
+    Mono<HashTagDocument> create(HashTagDocument hashTag) throws HashTagException;
 
-    Mono<HashTagDocument> findById(String id);
+    Mono<Boolean> delete(String id) throws HashTagException;
 
-    Mono<HashTagDocument> save(HashTagDocument hashTag);
+    Flux<HashTagDocument> findAll() throws HashTagException;
 
-    Disposable remove(HashTagDocument hashTag);
+    Flux<HashTagDocument> findAllEnabled() throws HashTagException;
+
+    Flux<HashTagDocument> findAllDisabled() throws HashTagException;
+
+    Mono<HashTagDocument> findById(String id) throws HashTagException;
+
+    Mono<HashTagDocument> findByText(String text) throws HashTagException;
+
 }
