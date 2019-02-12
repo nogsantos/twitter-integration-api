@@ -37,12 +37,16 @@ public class TwitterApiController {
 
         ModelMapper mapper = new ModelMapper();
 
-//        try {
-//            return Flux.fromStream(() -> service.getByHashTag(hashTag).map(
-//                    tweets -> mapper.map(tweets, TwitterDTO.class)
-//            ));
-//        } catch (TwitterException e) {
-//
-//        }
+        return Flux.fromStream(() -> {
+            try {
+                return service.getByHashTag(hashTag).map(
+                        tweets -> mapper.map(tweets, TwitterDTO.class)
+                );
+            } catch (TwitterException e) {
+                e.printStackTrace();
+                return null;
+            }
+        });
+
     }
 }

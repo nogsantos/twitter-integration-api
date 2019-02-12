@@ -34,15 +34,15 @@ public class TwitterScheduler {
         @Scheduled(cron = "0 0 12 * * *", zone = TIME_ZONE)
 //    @Scheduled(fixedRate = 4000)
     public void getTwitterMessagesByHashTagTask() {
-        List<String> hashTags = getAllAvailiableHashTags();
-        hashTags.forEach(s -> {
-            try {
-                Flux<TwitterDTO> twitterDTOFlux = twitterServiceImp.getByHashTag(s);
-                log.debug(twitterDTOFlux.toString());
-            } catch (TwitterException e) {
-                e.printStackTrace();
-            }
-        });
+//        List<String> hashTags = getAllAvailiableHashTags();
+//        hashTags.forEach(s -> {
+//            try {
+//                Flux<TwitterDTO> twitterDTOFlux = twitterServiceImp.getByHashTag(s);
+//                log.debug(twitterDTOFlux.toString());
+//            } catch (TwitterException e) {
+//                e.printStackTrace();
+//            }
+//        });
 
         log.info("Fixed Rate Task :: Execution Time {}", LocalDate.now().toString());
 
