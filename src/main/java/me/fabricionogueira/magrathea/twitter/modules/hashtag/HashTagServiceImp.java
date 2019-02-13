@@ -71,7 +71,7 @@ public class HashTagServiceImp implements HashTagService {
         return repository.insert(hashTag).doOnSuccess(hashTagDocument -> {
             try {
                 log.debug("HASH-TAG: {}", hashTagDocument.getText());
-                twitterApiService.getByHashAndSave(hashTag.getText());
+                twitterApiService.getByHashTagAndSave(hashTag.getText());
             } catch (TwitterException e) {
                 log.debug("ERROR: {}", e.getMessage());
             }

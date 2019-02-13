@@ -3,6 +3,7 @@ package me.fabricionogueira.magrathea.twitter.modules.twitter;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import twitter4j.*;
 
@@ -14,6 +15,12 @@ import java.util.stream.Stream;
 @Slf4j
 public class TwitterApiServiceImp implements TwitterApiService {
 
+    @Value("${application.twitter.config.limit.counter}")
+    private Integer configLimit;
+
+    @Value("${application.twitter.config.default.lang}")
+    private String configLang;
+
     final private TwitterService service;
 
     @Autowired
@@ -24,42 +31,46 @@ public class TwitterApiServiceImp implements TwitterApiService {
     @Override
     public Stream<Status> getByHashTag(String hashTag) throws TwitterException {
         try {
-            log.debug("Getting twitters by HashTag {}", hashTag);
-            Twitter twitter = TwitterFactory.getSingleton();
-            Query query = new Query("#" + hashTag);
-            query.setCount(100);
-            query.setLang("pt");
-            QueryResult result = twitter.search(query);
+            log.debug("Getting twitters by #{}", hashTag);
 
+            QueryResult result = getQueryResult(getInstance(), getQuery(hashTag));
             return result.getTweets().stream();
 
         } catch (TwitterException e) {
-            throw new TwitterException("EXCEPT " + e.getMessage());
+            throw new TwitterException(e.getMessage());
         }
     }
 
     @Override
-    public void getByHashAndSave(String hashTag) throws TwitterException {
+    public void getByHashTagAndSave(String hashTag) throws TwitterException {
         try {
-            Twitter twitter = TwitterFactory.getSingleton();
-            Query query = new Query("#" + hashTag);
-            query.setCount(10);
-            query.setLang("pt");
-            QueryResult result = twitter.search(query);
-            try {
-                ModelMapper mapper = new ModelMapper();
-                List<TwitterDocument> list = new ArrayList<>();
+            ModelMapper mapper = new ModelMapper();
+            List<TwitterDocument> list = new ArrayList<>();
 
-                result.getTweets().forEach(tweets -> list.add(mapper.map(tweets, TwitterDocument.class)));
+            getQueryResult(getInstance(), getQuery(hashTag))
+                    .getTweets()
+                    .forEach(tweets -> list.add(mapper.map(tweets, TwitterDocument.class)));
 
-                Stream<TwitterDocument> twitterStream = service.create(list).toStream();
-                log.debug("STREAM {}", twitterStream.count());
+            Stream<TwitterDocument> twitterStream = service.create(list).toStream();
+            log.debug("STREAM {}", twitterStream.count());
 
-            } catch (TwitterException e) {
-                log.debug("ERROR-ON-CREATE-DOCUMENT {}", e.getMessage());
-            }
         } catch (TwitterException e) {
-            throw new TwitterException("EXCEPT " + e.getMessage());
+            throw new TwitterException(e.getMessage());
         }
+    }
+
+    private QueryResult getQueryResult(Twitter instance, Query query) throws TwitterException {
+        return instance.search(query);
+    }
+
+    private Query getQuery(String hashTag) {
+        Query query = new Query("#" + hashTag);
+        query.setCount(configLimit);
+        query.setLang(configLang);
+        return query;
+    }
+
+    private Twitter getInstance() {
+        return TwitterFactory.getSingleton();
     }
 }

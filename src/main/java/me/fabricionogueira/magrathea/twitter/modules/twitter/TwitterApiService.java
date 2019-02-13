@@ -9,6 +9,6 @@ public interface TwitterApiService {
 
     Stream<Status> getByHashTag(String hashTag) throws TwitterException;
 
-    void getByHashAndSave(String hashTag) throws TwitterException;
+    void getByHashTagAndSave(String hashTag) throws TwitterException;
 
 }
