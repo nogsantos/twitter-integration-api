@@ -13,8 +13,8 @@ import reactor.core.publisher.Mono;
 @Api(description = "HashTag rest controller")
 public class HashTagController {
 
-    private HashTagService service;
-    private ModelMapper mapper;
+    final private HashTagService service;
+    final private ModelMapper mapper;
 
     @Autowired
     public HashTagController(HashTagService service) {

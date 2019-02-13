@@ -1,9 +1,6 @@
 package me.fabricionogueira.magrathea.twitter.modules.user;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.Data;
 import me.fabricionogueira.magrathea.twitter.modules.twitter.TwitterDocument;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
@@ -12,11 +9,8 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.List;
 
-@AllArgsConstructor
-@NoArgsConstructor
-@Getter
-@Setter
-@Document
+@Data
+@Document(collection = "user")
 public class UserDocument {
     @Id
     private String id;
@@ -26,6 +20,4 @@ public class UserDocument {
     private String email;
     private String location;
     private String biggerProfileImageURLHttps;
-    @DBRef
-    private List<TwitterDocument> tweets;
 }

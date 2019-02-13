@@ -1,15 +1,20 @@
 package me.fabricionogueira.magrathea.twitter.modules.twitter;
 
-import org.modelmapper.ModelMapper;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import twitter4j.Status;
+import twitter4j.TwitterException;
+
+import java.util.List;
 
 @Service
+@Slf4j
 public class TwitterServiceImp implements TwitterService {
 
-    private TwitterRepository repository;
+    final private TwitterRepository repository;
 
     @Autowired
     public TwitterServiceImp(TwitterRepository repository) {
@@ -17,13 +22,7 @@ public class TwitterServiceImp implements TwitterService {
     }
 
     @Override
-    public Mono<TwitterDocument> save(TwitterDocument twitterDocument) {
-        return repository.save(twitterDocument);
-    }
-
-    @Override
-    public Mono<TwitterDocument> save(Status tweet) {
-        ModelMapper mapper = new ModelMapper();
-        return repository.save(mapper.map(tweet, TwitterDocument.class));
+    public Flux<TwitterDocument> create(List<TwitterDocument> tweets) throws TwitterException {
+        return repository.saveAll(tweets);
     }
 }

@@ -16,7 +16,7 @@ import twitter4j.TwitterException;
 @Api(description = "Api TwitterDocument controller")
 public class TwitterApiController {
 
-    private TwitterApiServiceImp service;
+    final private TwitterApiServiceImp service;
 
     @Autowired
     public TwitterApiController(TwitterApiServiceImp service) {
