@@ -5,6 +5,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Flux;
 import twitter4j.*;
 
 import java.util.ArrayList;
@@ -42,7 +43,7 @@ public class TwitterApiServiceImp implements TwitterApiService {
     }
 
     @Override
-    public void getByHashTagAndSave(String hashTag) throws TwitterException {
+    public Flux<TwitterDocument> saveTweetByHashTag(String hashTag) throws TwitterException {
         try {
             ModelMapper mapper = new ModelMapper();
             List<TwitterDocument> list = new ArrayList<>();
@@ -51,8 +52,7 @@ public class TwitterApiServiceImp implements TwitterApiService {
                     .getTweets()
                     .forEach(tweets -> list.add(mapper.map(tweets, TwitterDocument.class)));
 
-            Stream<TwitterDocument> twitterStream = service.create(list).toStream();
-            log.debug("STREAM {}", twitterStream.count());
+            return service.create(list);
 
         } catch (TwitterException e) {
             throw new TwitterException(e.getMessage());

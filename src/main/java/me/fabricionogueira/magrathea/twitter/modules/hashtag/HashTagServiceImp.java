@@ -68,14 +68,18 @@ public class HashTagServiceImp implements HashTagService {
             throw new HashTagRequiredFieldsException("Text field is required");
         }
 
-        return repository.insert(hashTag).doOnSuccess(hashTagDocument -> {
-            try {
-                log.debug("HASH-TAG: {}", hashTagDocument.getText());
-                twitterApiService.getByHashTagAndSave(hashTag.getText());
-            } catch (TwitterException e) {
-                log.debug("ERROR: {}", e.getMessage());
-            }
-        });
+        return repository
+                .insert(hashTag)
+                .doOnSuccess(hashTagDocument -> saveTweetsByHashTag(hashTag, hashTagDocument));
+    }
+
+    private void saveTweetsByHashTag(HashTagDocument hashTag, HashTagDocument hashTagDocument) {
+        try {
+            log.debug("HASH-TAG: {}", hashTagDocument.getText());
+            twitterApiService.saveTweetByHashTag(hashTag.getText()).subscribe();
+        } catch (TwitterException e) {
+            log.debug("ERROR: {}", e.getMessage());
+        }
     }
 
     @Override

@@ -16,5 +16,7 @@ public class TwitterDocument {
     private String text;
     private Long retweetCount;
     private String lang;
+    private String[] hashtagEntities;
     private UserDocument user;
+
 }

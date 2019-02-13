@@ -39,7 +39,7 @@ public class TwitterScheduler {
 //            try {
 //                Flux<TwitterDTO> twitterDTOFlux = twitterServiceImp.getByHashTag(s);
 //                log.debug(twitterDTOFlux.toString());
-//            } catch (TwitterException e) {
+//            } catch (TwitterLocalException e) {
 //                e.printStackTrace();
 //            }
 //        });
