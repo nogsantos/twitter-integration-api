@@ -49,6 +49,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-webflux'
     runtimeOnly 'org.springframework.boot:spring-boot-devtools'
     compile 'org.springframework.boot:spring-boot-starter-jetty'
+//    compile 'org.springframework.boot:spring-boot-starter-netty'
     //	Twitter integration
     compile 'org.twitter4j:twitter4j:4.0.7'
     compile group: 'org.twitter4j', name: 'twitter4j-stream', version: '4.0.7'

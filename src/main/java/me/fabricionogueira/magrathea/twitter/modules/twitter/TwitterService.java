@@ -1,12 +1,16 @@
 package me.fabricionogueira.magrathea.twitter.modules.twitter;
 
-import reactor.core.publisher.Mono;
-import twitter4j.Status;
+import me.fabricionogueira.magrathea.twitter.modules.twitter.exceptions.TwitterLocalException;
+import reactor.core.publisher.Flux;
+
+import java.util.List;
 
 public interface TwitterService {
 
-    Mono<TwitterDocument> save(TwitterDocument twitterDocument);
+    Flux<TwitterDocument> create(List<TwitterDocument> tweets) throws TwitterLocalException;
 
-    Mono<TwitterDocument> save(Status tweet);
+    Flux<TwitterDocument> findAll() throws TwitterLocalException;
+
+    Flux<TwitterDocument> findByHashTag(String hashTag) throws TwitterLocalException;
 
 }

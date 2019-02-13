@@ -1,19 +1,14 @@
 package me.fabricionogueira.magrathea.twitter.modules.twitter;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.Data;
+import me.fabricionogueira.magrathea.twitter.modules.user.UserDocument;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.Date;
 
-@AllArgsConstructor
-@NoArgsConstructor
-@Getter
-@Setter
-@Document
+@Data
+@Document(collection = "tweets")
 public class TwitterDocument {
     @Id
     private Long id;
@@ -22,6 +17,6 @@ public class TwitterDocument {
     private Long retweetCount;
     private String lang;
     private String[] hashtagEntities;
-//    @DBRef
-//    private UserDocument user;
+    private UserDocument user;
+
 }

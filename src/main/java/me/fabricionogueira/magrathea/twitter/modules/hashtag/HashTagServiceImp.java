@@ -1,24 +1,30 @@
 package me.fabricionogueira.magrathea.twitter.modules.hashtag;
 
+import lombok.extern.slf4j.Slf4j;
 import me.fabricionogueira.magrathea.twitter.modules.hashtag.exceptions.HashTagException;
 import me.fabricionogueira.magrathea.twitter.modules.hashtag.exceptions.HashTagNotFoundException;
 import me.fabricionogueira.magrathea.twitter.modules.hashtag.exceptions.HashTagRequiredFieldsException;
+import me.fabricionogueira.magrathea.twitter.modules.twitter.TwitterApiService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+import twitter4j.TwitterException;
 
 import static java.lang.Boolean.FALSE;
 import static java.lang.Boolean.TRUE;
 
 @Service
+@Slf4j
 public class HashTagServiceImp implements HashTagService {
 
-    private HashTagRepository repository;
+    final private HashTagRepository repository;
+    final private TwitterApiService twitterApiService;
 
     @Autowired
-    public HashTagServiceImp(HashTagRepository repository) {
+    public HashTagServiceImp(HashTagRepository repository, TwitterApiService twitterApiService) {
         this.repository = repository;
+        this.twitterApiService = twitterApiService;
     }
 
     @Override
@@ -61,7 +67,19 @@ public class HashTagServiceImp implements HashTagService {
         if (hashTag == null || hashTag.getText().isEmpty()) {
             throw new HashTagRequiredFieldsException("Text field is required");
         }
-        return repository.insert(hashTag);
+
+        return repository
+                .insert(hashTag)
+                .doOnSuccess(hashTagDocument -> saveTweetsByHashTag(hashTag, hashTagDocument));
+    }
+
+    private void saveTweetsByHashTag(HashTagDocument hashTag, HashTagDocument hashTagDocument) {
+        try {
+            log.debug("HASH-TAG: {}", hashTagDocument.getText());
+            twitterApiService.saveTweetByHashTag(hashTag.getText()).subscribe();
+        } catch (TwitterException e) {
+            log.debug("ERROR: {}", e.getMessage());
+        }
     }
 
     @Override
@@ -71,6 +89,5 @@ public class HashTagServiceImp implements HashTagService {
             repository.save(hashTag).subscribe();
         }).flatMap(s -> Mono.just(TRUE));
     }
-
 
 }

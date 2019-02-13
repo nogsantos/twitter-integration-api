@@ -12,18 +12,18 @@ import reactor.core.publisher.Flux;
 import twitter4j.TwitterException;
 
 @RestController
-@RequestMapping("/twitter/api")
-@Api(description = "Api TwitterDocument controller")
+@RequestMapping("/twitter-api")
+@Api(description = "Twitter Api controller")
 public class TwitterApiController {
 
-    private TwitterApiServiceImp service;
+    final private TwitterApiServiceImp service;
 
     @Autowired
     public TwitterApiController(TwitterApiServiceImp service) {
         this.service = service;
     }
 
-    @ApiOperation("Get a list of Twitters by HashTag")
+    @ApiOperation("Get a list of tweets on twitter API by HashTag")
     @ApiResponses({
             @ApiResponse(code = 200, message = "Successfully sent"),
             @ApiResponse(code = 400, message = "Processing request error"),
@@ -31,7 +31,7 @@ public class TwitterApiController {
     })
     @GetMapping("/search/{hashTag}")
     public Flux<TwitterDTO> search(
-            @ApiParam(value = "Search on twitter by HashTag text")
+            @ApiParam(value = "HashTag to search")
             @PathVariable String hashTag
     ) {
 
