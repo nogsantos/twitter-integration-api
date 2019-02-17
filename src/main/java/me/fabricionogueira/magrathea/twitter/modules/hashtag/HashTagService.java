@@ -8,13 +8,9 @@ public interface HashTagService {
 
     Mono<HashTagDocument> create(HashTagDocument hashTag) throws HashTagException;
 
-    Mono<Boolean> delete(String id) throws HashTagException;
+    Mono<Boolean> delete(HashTagDocument hashTag) throws HashTagException;
 
     Flux<HashTagDocument> findAll() throws HashTagException;
-
-    Flux<HashTagDocument> findAllEnabled() throws HashTagException;
-
-    Flux<HashTagDocument> findAllDisabled() throws HashTagException;
 
     Mono<HashTagDocument> findById(String id) throws HashTagException;
 
