@@ -31,7 +31,7 @@ public class TwitterController {
             @ApiResponse(code = 400, message = "Processing request error"),
             @ApiResponse(code = 404, message = "Request no found")
     })
-    @GetMapping("/search")
+    @GetMapping("/")
     public Flux<TwitterDTO> findAll() {
 
         return service

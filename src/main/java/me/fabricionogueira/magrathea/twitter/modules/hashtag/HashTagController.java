@@ -35,32 +35,6 @@ public class HashTagController {
         );
     }
 
-    @ApiOperation("Get all HashTags enabled")
-    @ApiResponses({
-            @ApiResponse(code = 200, message = "Successfully sent"),
-            @ApiResponse(code = 400, message = "Processing request error"),
-            @ApiResponse(code = 404, message = "Not found")
-    })
-    @GetMapping("/enabled")
-    public Flux<HashTagDTO> findAllEnabled() {
-        return Flux.fromStream(() -> service.findAllEnabled().toStream()
-                .map(hashTagDocument -> mapper.map(hashTagDocument, HashTagDTO.class))
-        );
-    }
-
-    @ApiOperation("Get all HashTags disabled")
-    @ApiResponses({
-            @ApiResponse(code = 200, message = "Successfully sent"),
-            @ApiResponse(code = 400, message = "Processing request error"),
-            @ApiResponse(code = 404, message = "Not found")
-    })
-    @GetMapping("/disabled")
-    public Flux<HashTagDTO> findAllDisabled() {
-        return Flux.fromStream(() -> service.findAllDisabled().toStream()
-                .map(hashTagDocument -> mapper.map(hashTagDocument, HashTagDTO.class))
-        );
-    }
-
     @ApiOperation("Get a HashTag by string id")
     @ApiResponses({
             @ApiResponse(code = 200, message = "Successfully sent"),
@@ -99,7 +73,7 @@ public class HashTagController {
             @ApiResponse(code = 400, message = "Processing request error"),
             @ApiResponse(code = 404, message = "Resource not found")
     })
-    @PostMapping("/save")
+    @PostMapping("/")
     public Mono<HashTagDTO> create(@RequestBody final HashTagDocument hashTag) {
         return service.create(hashTag).map(hashTagDocumentMono -> mapper.map(hashTagDocumentMono, HashTagDTO.class));
     }
@@ -110,10 +84,8 @@ public class HashTagController {
             @ApiResponse(code = 400, message = "Processing request error"),
             @ApiResponse(code = 404, message = "Resource not found")
     })
-    @DeleteMapping("/delete/{id}")
-    public Mono<Boolean> delete(@ApiParam(value = "Set as disabled a HashTag by id")
-                                @PathVariable String id) {
-
-        return service.delete(id);
+    @DeleteMapping("/")
+    public Mono<Boolean> delete(@RequestBody final HashTagDocument hashTag) {
+        return service.delete(hashTag);
     }
 }
