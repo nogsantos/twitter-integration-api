@@ -28,7 +28,7 @@ public class TwitterServiceImp implements TwitterService {
 
     @Override
     public Flux<TwitterDocument> findAll() {
-        return repository.findAll();
+        return repository.findAllByOrderByCreatedDateDesc();
     }
 
     @Override

@@ -1,6 +1,5 @@
 package me.fabricionogueira.magrathea.twitter.modules.twitter;
 
-import me.fabricionogueira.magrathea.twitter.modules.twitter.exceptions.TwitterLocalException;
 import reactor.core.publisher.Flux;
 
 import java.util.List;
