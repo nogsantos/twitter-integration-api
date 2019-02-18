@@ -7,10 +7,10 @@ import java.util.List;
 
 public interface TwitterService {
 
-    Flux<TwitterDocument> create(List<TwitterDocument> tweets) throws TwitterLocalException;
+    Flux<TwitterDocument> create(List<TwitterDocument> tweets);
 
-    Flux<TwitterDocument> findAll() throws TwitterLocalException;
+    Flux<TwitterDocument> findAll();
 
-    Flux<TwitterDocument> findByHashTag(String hashTag) throws TwitterLocalException;
+    Flux<TwitterDocument> findByHashTag(String hashTag);
 
 }

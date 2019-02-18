@@ -22,17 +22,17 @@ public class TwitterServiceImp implements TwitterService {
     }
 
     @Override
-    public Flux<TwitterDocument> create(List<TwitterDocument> tweets) throws TwitterLocalException {
+    public Flux<TwitterDocument> create(List<TwitterDocument> tweets) {
         return repository.saveAll(tweets);
     }
 
     @Override
-    public Flux<TwitterDocument> findAll() throws TwitterLocalException {
+    public Flux<TwitterDocument> findAll() {
         return repository.findAll();
     }
 
     @Override
-    public Flux<TwitterDocument> findByHashTag(String hashTag) throws TwitterLocalException {
+    public Flux<TwitterDocument> findByHashTag(String hashTag) {
         log.debug("HashtagEntityJSONImpl{text='{}'}", hashTag);
         return repository
                 .findByHashtagEntitiesIsIn(Collections.singletonList("HashtagEntityJSONImpl{text='" + hashTag + "'}"))

@@ -1,9 +1,13 @@
 package me.fabricionogueira.magrathea.twitter.modules.hashtag.exceptions;
 
-public class HashTagException extends RuntimeException {
+import org.springframework.http.HttpStatus;
+import org.springframework.web.server.ResponseStatusException;
 
-    public HashTagException(String message) {
-        super(message);
+public class HashTagException extends ResponseStatusException {
+
+    public HashTagException(HttpStatus status, String message) {
+        super(status, message, null);
     }
+
 
 }

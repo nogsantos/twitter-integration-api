@@ -10,7 +10,7 @@ public interface HashTagService {
 
     Mono<Boolean> delete(HashTagDocument hashTag) throws HashTagException;
 
-    Flux<HashTagDocument> findAll() throws HashTagException;
+    Flux<HashTagDocument> findAll();
 
     Mono<HashTagDocument> findById(String id) throws HashTagException;
 

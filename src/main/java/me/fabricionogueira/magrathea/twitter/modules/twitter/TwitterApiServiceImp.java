@@ -1,6 +1,7 @@
 package me.fabricionogueira.magrathea.twitter.modules.twitter;
 
 import lombok.extern.slf4j.Slf4j;
+import me.fabricionogueira.magrathea.twitter.modules.twitter.exceptions.TwitterNotFoundLocalException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -52,7 +53,8 @@ public class TwitterApiServiceImp implements TwitterApiService {
                     .getTweets()
                     .forEach(tweets -> list.add(mapper.map(tweets, TwitterDocument.class)));
 
-            return service.create(list);
+            return service
+                    .create(list);
 
         } catch (TwitterException e) {
             throw new TwitterException(e.getMessage());

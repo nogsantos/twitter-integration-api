@@ -2,6 +2,7 @@ package me.fabricionogueira.magrathea.twitter.modules.twitter;
 
 import io.swagger.annotations.*;
 import me.fabricionogueira.magrathea.twitter.modules.twitter.dto.TwitterDTO;
+import me.fabricionogueira.magrathea.twitter.modules.twitter.exceptions.TwitterLocalException;
 import me.fabricionogueira.magrathea.twitter.modules.twitter.exceptions.TwitterNotFoundLocalException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,8 +52,6 @@ public class TwitterController {
 
         return service
                 .findByHashTag(hashTag)
-                .switchIfEmpty(empty -> new TwitterNotFoundLocalException(empty.toString()))
                 .map(twitterDocument -> mapper.map(twitterDocument, TwitterDTO.class));
-
     }
 }

@@ -12,5 +12,5 @@ public interface TwitterRepository extends ReactiveMongoRepository<TwitterDocume
 
     Flux<TwitterDocument> findAllByOrderByCreatedDateDesc();
 
-    Flux<TwitterDocument> findByHashtagEntitiesIsIn(List<String> hashTag) throws TwitterLocalException;
+    Flux<TwitterDocument> findByHashtagEntitiesIsIn(List<String> hashTag);
 }

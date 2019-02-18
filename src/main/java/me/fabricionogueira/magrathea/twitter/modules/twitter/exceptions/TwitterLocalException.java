@@ -1,7 +1,10 @@
 package me.fabricionogueira.magrathea.twitter.modules.twitter.exceptions;
 
-public class TwitterLocalException extends RuntimeException {
-    public TwitterLocalException(String message) {
-        super(message);
+import org.springframework.http.HttpStatus;
+import org.springframework.web.server.ResponseStatusException;
+
+public class TwitterLocalException extends ResponseStatusException {
+    public TwitterLocalException(HttpStatus status, String message) {
+        super(status, message, null);
     }
 }

@@ -2,6 +2,7 @@ package me.fabricionogueira.magrathea.twitter.modules.hashtag;
 
 import io.swagger.annotations.*;
 import me.fabricionogueira.magrathea.twitter.modules.hashtag.dto.HashTagDTO;
+import me.fabricionogueira.magrathea.twitter.modules.hashtag.exceptions.HashTagException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -44,7 +45,7 @@ public class HashTagController {
     @GetMapping("/search/id/{id}")
     public Mono<HashTagDTO> findById(
             @ApiParam(value = "Search a HashTag by id")
-            @PathVariable String id) {
+            @PathVariable String id) throws HashTagException {
 
         return service
                 .findById(id)
@@ -60,7 +61,7 @@ public class HashTagController {
     @GetMapping("/search/text/{text}")
     public Mono<HashTagDTO> findByText(
             @ApiParam(value = "Search a HashTag by text")
-            @PathVariable String text) {
+            @PathVariable String text) throws HashTagException {
 
         return service
                 .findByText(text)
@@ -74,8 +75,10 @@ public class HashTagController {
             @ApiResponse(code = 404, message = "Resource not found")
     })
     @PostMapping("/")
-    public Mono<HashTagDTO> create(@RequestBody final HashTagDocument hashTag) {
-        return service.create(hashTag).map(hashTagDocumentMono -> mapper.map(hashTagDocumentMono, HashTagDTO.class));
+    public Mono<HashTagDTO> create(@RequestBody final HashTagDocument hashTag) throws HashTagException {
+        return service
+                .create(hashTag)
+                .map(hashTagDocumentMono -> mapper.map(hashTagDocumentMono, HashTagDTO.class));
     }
 
     @ApiOperation("Delete a HashTag")
@@ -85,7 +88,7 @@ public class HashTagController {
             @ApiResponse(code = 404, message = "Resource not found")
     })
     @DeleteMapping("/")
-    public Mono<Boolean> delete(@RequestBody final HashTagDocument hashTag) {
+    public Mono<Boolean> delete(@RequestBody final HashTagDocument hashTag) throws HashTagException {
         return service.delete(hashTag);
     }
 }
