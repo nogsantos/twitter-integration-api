@@ -10,5 +10,7 @@ import java.util.List;
 @Repository
 public interface TwitterRepository extends ReactiveMongoRepository<TwitterDocument, String> {
 
+    Flux<TwitterDocument> findAllByOrderByCreatedDateDesc();
+
     Flux<TwitterDocument> findByHashtagEntitiesIsIn(List<String> hashTag) throws TwitterLocalException;
 }

@@ -33,12 +33,9 @@ public class TwitterController {
     })
     @GetMapping("/")
     public Flux<TwitterDTO> findAll() {
-
-        return service
-                .findAll()
-                .switchIfEmpty(empty -> new TwitterNotFoundLocalException(empty.toString()))
-                .map(twitterDocument -> mapper.map(twitterDocument, TwitterDTO.class));
-
+        return Flux.fromStream(() -> service.findAll().toStream()
+                .map(hashTagDocument -> mapper.map(hashTagDocument, TwitterDTO.class))
+        );
     }
 
     @ApiOperation("Get a list of persisted tweets on database by hashTag")

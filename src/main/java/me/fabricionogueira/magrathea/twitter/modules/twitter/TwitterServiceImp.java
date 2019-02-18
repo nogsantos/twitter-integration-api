@@ -28,11 +28,7 @@ public class TwitterServiceImp implements TwitterService {
 
     @Override
     public Flux<TwitterDocument> findAll() throws TwitterLocalException {
-        log.debug("Find all");
-        return repository
-                .findAll()
-                .switchIfEmpty(Subscriber::onComplete)
-                .onErrorStop();
+        return repository.findAll();
     }
 
     @Override
