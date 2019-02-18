@@ -26,18 +26,17 @@ public class TwitterScheduler {
         this.twitterApiService = twitterApiService;
     }
 
-    //    @Scheduled(fixedRate = 10000)
+//        @Scheduled(fixedRate = 10000)
     @Scheduled(cron = "0 0 12 * * *", zone = TIME_ZONE)
     public void getTwitterMessagesByHashTagTask() {
         hashTagRepository.findAll().doOnEach(hashTagDocument -> {
             try {
-                System.out.println(hashTagDocument.get().getText());
-                log.debug("SCHEDULER-HASHTAG: {}", hashTagDocument.get().getText());
+                log.debug("SCHEDULER-BY-HASHTAG: {}", hashTagDocument.get().getText());
                 twitterApiService
                         .saveTweetByHashTag(hashTagDocument.get().getText())
                         .toStream();
             } catch (TwitterException e) {
-                log.debug("ERROR: {}", e.getMessage());
+                log.debug("SCHEDULER-ERROR: {}", e.getMessage());
             }
         }).toStream();
         log.info("Fixed Rate Task :: Execution Time {}", LocalDate.now().toString());
