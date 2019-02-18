@@ -1,18 +1,14 @@
 package me.fabricionogueira.magrathea.twitter.modules.twitter;
 
 import lombok.extern.slf4j.Slf4j;
-import me.fabricionogueira.magrathea.twitter.modules.hashtag.HashTagDocument;
-import me.fabricionogueira.magrathea.twitter.modules.hashtag.HashTagService;
-import me.fabricionogueira.magrathea.twitter.modules.twitter.dto.TwitterDTO;
+import me.fabricionogueira.magrathea.twitter.modules.hashtag.HashTagRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
-import reactor.core.publisher.Flux;
 import twitter4j.TwitterException;
 
 import java.time.LocalDate;
-import java.util.List;
 
 @Component
 @EnableScheduling
@@ -20,35 +16,30 @@ import java.util.List;
 public class TwitterScheduler {
 
     private static final String TIME_ZONE = "America/Sao_Paulo";
-    private static final String SCHEDULER = "SCHEDULER";
 
-    private HashTagService hashTagService;
-    private TwitterApiServiceImp twitterServiceImp;
+    private HashTagRepository hashTagRepository;
+    private TwitterApiService twitterApiService;
 
     @Autowired
-    public TwitterScheduler(HashTagService hashTagService, TwitterApiServiceImp twitterServiceImp) {
-        this.hashTagService = hashTagService;
-        this.twitterServiceImp = twitterServiceImp;
+    public TwitterScheduler(HashTagRepository hashTagRepository, TwitterApiService twitterApiService) {
+        this.hashTagRepository = hashTagRepository;
+        this.twitterApiService = twitterApiService;
     }
 
-        @Scheduled(cron = "0 0 12 * * *", zone = TIME_ZONE)
-//    @Scheduled(fixedRate = 4000)
+    //    @Scheduled(fixedRate = 10000)
+    @Scheduled(cron = "0 0 12 * * *", zone = TIME_ZONE)
     public void getTwitterMessagesByHashTagTask() {
-//        List<String> hashTags = getAllAvailiableHashTags();
-//        hashTags.forEach(s -> {
-//            try {
-//                Flux<TwitterDTO> twitterDTOFlux = twitterServiceImp.getByHashTag(s);
-//                log.debug(twitterDTOFlux.toString());
-//            } catch (TwitterLocalException e) {
-//                e.printStackTrace();
-//            }
-//        });
-
+        hashTagRepository.findAll().doOnEach(hashTagDocument -> {
+            try {
+                System.out.println(hashTagDocument.get().getText());
+                log.debug("SCHEDULER-HASHTAG: {}", hashTagDocument.get().getText());
+                twitterApiService
+                        .saveTweetByHashTag(hashTagDocument.get().getText())
+                        .toStream();
+            } catch (TwitterException e) {
+                log.debug("ERROR: {}", e.getMessage());
+            }
+        }).toStream();
         log.info("Fixed Rate Task :: Execution Time {}", LocalDate.now().toString());
-
-    }
-
-    private List<String> getAllAvailiableHashTags() {
-        return hashTagService.findAll().map(HashTagDocument::getText).collectList().block();
     }
 }
