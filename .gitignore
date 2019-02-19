@@ -26,3 +26,4 @@
 /.nb-gradle/
 
 .env
+src/main/resources/twitter4j.properties

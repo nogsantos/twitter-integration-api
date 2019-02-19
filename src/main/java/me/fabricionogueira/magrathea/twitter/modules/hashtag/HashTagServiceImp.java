@@ -59,7 +59,10 @@ public class HashTagServiceImp implements HashTagService {
         return repository
                 .insert(hashTag)
                 .doOnSuccess(hashTagDocument -> saveTweetsByHashTag(hashTag))
-                .onErrorResume(e -> Mono.error(new HashTagUniqueException(BAD_REQUEST, "A HashTag " + hashTag.getText() + " já está cadastrada no sistema")));
+                .onErrorResume(e -> {
+                    log.debug(e.getMessage());
+                    return Mono.error(new HashTagUniqueException(BAD_REQUEST, "A HashTag " + hashTag.getText() + " já está cadastrada no sistema"));
+                });
     }
 
 
