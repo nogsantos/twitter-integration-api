@@ -58,7 +58,7 @@ public class HashTagServiceImp implements HashTagService {
 
         return repository
                 .insert(hashTag)
-                .doOnSuccess(hashTagDocument -> saveTweetsByHashTag(hashTag, hashTagDocument))
+                .doOnSuccess(hashTagDocument -> saveTweetsByHashTag(hashTag))
                 .onErrorResume(e -> Mono.error(new HashTagUniqueException(BAD_REQUEST, "A HashTag " + hashTag.getText() + " já está cadastrada no sistema")));
     }
 
@@ -71,11 +71,11 @@ public class HashTagServiceImp implements HashTagService {
                 .flatMap(s -> Mono.just(TRUE));
     }
 
-    private void saveTweetsByHashTag(HashTagDocument hashTag, HashTagDocument hashTagDocument) {
+    private void saveTweetsByHashTag(HashTagDocument hashTag) {
         try {
             twitterApiService.saveTweetByHashTag(hashTag.getText()).subscribe();
         } catch (TwitterException e) {
-            log.debug("ERROR: {}", e.getMessage());
+            log.debug("SAVE-BY-HASHTAG-ERROR: {}", e.getMessage());
         }
     }
 
