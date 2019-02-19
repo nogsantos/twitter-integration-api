@@ -27,3 +27,4 @@
 
 .env
 src/main/resources/twitter4j.properties
+keys/gcloud-*
